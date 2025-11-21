@@ -1,0 +1,8 @@
+Zip to text:
+============
+[System.Convert]::ToBase64String([System.IO.File]::ReadAllBytes("path\to\file.zip")) | Set-Content "path\to\file.txt"
+ 
+ 
+Text to Zip:
+============
+[System.IO.File]::WriteAllBytes("path\to\file.zip",[System.Convert]::FromBase64String([System.IO.File]::ReadAllText("path\to\file.txt")))
