@@ -1,0 +1,22 @@
+$inputFile = "path\to\input.txt"
+$linesPerFile = 5000
+$outputRoot = "path\to\output_part"
+
+$reader = [System.IO.File]::OpenText($inputFile)
+$counter = 1
+$lineCount = 0
+$writer = New-Object System.IO.StreamWriter ("$outputRoot$counter.txt")
+
+while (!$reader.EndOfStream) {
+    $line = $reader.ReadLine()
+    $writer.WriteLine($line)
+    $lineCount++
+    if ($lineCount -ge $linesPerFile) {
+        $writer.Close()
+        $counter++
+        $writer = New-Object System.IO.StreamWriter ("$outputRoot$counter.txt")
+        $lineCount = 0
+    }
+}
+$writer.Close()
+$reader.Close()
