@@ -1,22 +1,12 @@
-$inputFile = "path\to\input.txt"
-$linesPerFile = 5000
-$outputRoot = "path\to\output_part"
+# Parameters
+$input = "C:\Path\to\your\file.txt"
+$outputBase = "C:\Path\to\out\file_part_"
+$chunkSize = 1000000  # Number of characters per file (e.g., 1 million)
+$content = Get-Content $input -Raw  # Reads the file as a single long string
 
-$reader = [System.IO.File]::OpenText($inputFile)
-$counter = 1
-$lineCount = 0
-$writer = New-Object System.IO.StreamWriter ("$outputRoot$counter.txt")
-
-while (!$reader.EndOfStream) {
-    $line = $reader.ReadLine()
-    $writer.WriteLine($line)
-    $lineCount++
-    if ($lineCount -ge $linesPerFile) {
-        $writer.Close()
-        $counter++
-        $writer = New-Object System.IO.StreamWriter ("$outputRoot$counter.txt")
-        $lineCount = 0
-    }
+for ($i = 0; $i -lt $content.Length; $i += $chunkSize) {
+    $outfile = "${outputBase}$($i/$chunkSize + 1).txt"
+    $length = [Math]::Min($chunkSize, $content.Length - $i)
+    $chunk = $content.Substring($i, $length)
+    Set-Content $outfile $chunk
 }
-$writer.Close()
-$reader.Close()
