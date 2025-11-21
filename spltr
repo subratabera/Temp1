@@ -10,3 +10,7 @@ for ($i = 0; $i -lt $content.Length; $i += $chunkSize) {
     $chunk = $content.Substring($i, $length)
     Set-Content $outfile $chunk
 }
+
+
+
+Get-Content C:\Path\to\out\file_part_*.txt -Raw | Set-Content C:\Path\to\out\combined.txt
